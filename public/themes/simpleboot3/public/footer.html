@@ -1,0 +1,35 @@
+<footer class="main-footer">
+<!-- Footer ================================================== -->
+<hr>
+<div id="footer" class="container">
+    <hook name="footer_start"/>
+    <div class="links">链接：
+        <links>
+            <a href="{$vo.url|default=''}" target="{$vo.target|default=''}" title="{$vo.description|default=''}">{$vo.name|default=''}</a>&nbsp;&nbsp;
+        </links>
+    </div>
+    <p>&nbsp;</p>
+    <p>
+        All the contents of the website are reprinted from <a href="https://linux.cn/" target="_blank">Linux中国</a>.<br>
+        Please contact <a href="mailto:luoxulx@live.com" rel="nofollow">luoxulx@live.com</a> and then administrators will <font color="red">DELETE</font> it immediately.
+        <br/>
+        Based on
+        <a href="http://getbootstrap.com/" target="_blank">Bootstrap</a>.
+        Icons from
+        <a href="http://fortawesome.github.com/Font-Awesome/" target="_blank">Font Awesome</a>
+        <br>
+        备案:
+        <notempty name="site_info.site_icp">
+            <a href="http://www.miitbeian.gov.cn/" target="_blank">{$site_info.site_icp}</a>
+            <else/>
+            请在后台设置"网站信息"设置"备案信息"
+        </notempty>
+    </p>
+</div>
+<div>
+</div>
+<div id="backtotop">
+    <i class="fa fa-arrow-circle-up"></i>
+</div>
+</footer>
+{$site_info['site_analytics']}

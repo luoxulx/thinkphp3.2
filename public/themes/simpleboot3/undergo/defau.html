@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>LNMPA留言区|{$site_info.site_name|default=''}</title>
+    <meta name="keywords" content="{$site_info.site_seo_keywords|default=''}"/>
+    <meta name="description" content="{$site_info.site_seo_description|default=''}">
+    <include file="public@head"/>
+    <link href="__TMPL__/public/assets/css/slippry/slippry.css" rel="stylesheet">
+    <style>
+    
+    </style>
+    <hook name="before_head_end"/>
+</head>
+<body class="body-white">
+<include file="public@nav"/>
+
+<div class="container">
+<div class="row">
+	<div class="">
+	{$about_info|htmlspecialchars_decode|default=""}
+	</div>
+	<div class="prestyle">
+	<pre>
+	</pre>
+	</div>
+</div>
+<!-- 时间线 -->
+<div class="tc-box">
+  <div class="headtitle">
+    <h5><cite>将过去抽象到二维平面，垂直呈现一段从过去到现在的故事。</cite><small><cite>一龙葵</cite></small></h5>
+  </div>
+  <volist name="list" id="val">
+  <div class="posts">
+    <dl class="dl-horizontal">
+      <dt>
+        <a class="img-wraper" title="{$val['info']|msubstr=0,6}"><notempty name="val['img']"><img src="{:cmf_get_image_url($val.img)}" class="img-responsive" alt="{$val['info']|msubstr=0,6}"></notempty></a>
+      </dt>
+      <dd>
+        <a>{:date('Y年m月d日',$val['time'])}</a>
+        <p class="{$val['class']}">&nbsp;&nbsp;{$val['info']}</p>
+      </dd>
+    </dl>
+  </div>
+  </volist>
+</div>
+
+<div class="tc-box">
+<!-- 留言区插件 -->
+<!-- guestbook -->
+<php>$guestbook=hook_one('guestbook');</php>
+<if condition="empty($guestbook) && cmf_get_current_admin_id()">
+    <div class="tc-box">
+        <div class="alert alert-warning" role="alert">此区域这为留言区，请安装留言插件！<br><em>注：普通用户不会看到此提示！</em></div>
+    </div>
+</if>
+{$guestbook}
+</div>
+
+<!-- 访客留言列表 -->
+<div class="tc-box">
+<iframe style="zoom:0.8;" src="{:url('undergo/TimeLine/showgus')}" scrolling="yes" id="guest_iframe" width="100%" height="100%"></iframe>  
+</div>
+
+<include file="public@footer"/>
+</div>
+<!-- /container -->
+<include file="public@scripts"/>
+<script src="__TMPL__/public/assets/js/slippry.min.js"></script>
+<script>
+window.onload = function () {
+	setIframeHeight(document.getElementById('guest_iframe'));
+};
+$(function () {
+    $("#home-slider").slippry({ transition: 'fade', useCSS: true, captions: false, speed: 1000, pause: 3000, auto: true, preload: 'visible' });
+    $("#home-slider").show();
+//guest
+Wind.css('layer');
+Wind.use("layer", function(){
+	$('#form-horizontal').submit(function() {
+		var loadT = layer.load(2, {time:3*1000});
+		var info = $('#input-info').val();
+		if (info.length==0){
+			layer.msg('一个字也不留下，不厚道了啊~~',{icon:5});
+			return false;
+		}else {
+			var data = {'nickname':$('#input-nickname').val(),'email':$('#input-email').val(),'url':$('#input-url').val(),'info':info,'is_re':$('#input-is_re').val()};
+			if(!data) layer.msg('内容不见了，重新填一下吧~~',{icon:5});
+			$.post("{:url('guestpost')}",{data:data},function(res){
+				layer.close(loadT);
+				if(res.code == 1){
+					$('#form-horizontal')[0].reset();
+					layer.msg(res.msg,{icon:6});
+				}else{
+					layer.msg(res.msg,{icon:5});
+				}
+			});
+		}
+		return false;
+	});
+});
+});
+
+function setIframeHeight(iframe) {
+	if (iframe) {
+		var iframeWin = iframe.contentWindow || iframe.contentDocument.parentWindow;
+		if (iframeWin.document.body) {
+			iframe.height = iframeWin.document.documentElement.scrollHeight+155 || iframeWin.document.body.scrollHeight+155;
+		}
+	}
+};
+</script>
+<hook name="before_body_end"/>
+</body>
+</html>

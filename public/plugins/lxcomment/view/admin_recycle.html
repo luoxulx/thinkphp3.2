@@ -1,0 +1,61 @@
+<!doctype html>
+<html>
+<head>
+    <include file="public/head"/>
+    <title>LNMPA评论插件|评论回收站</title>
+    <meta name="description" content="LNMPA评论插件">
+    <meta name="keywords" content="LNMPA评论插件">
+    <style>.table-bordered{margin-top:10px;}</style>
+</head>
+<body>
+<div class="wrap js-check-wrap">
+    <ul class="nav nav-tabs">
+        <li><a href="{:cmf_plugin_url('lxcomment://AdminIndex/index')}">评论管理</a></li>
+        <li class="active"><a>评论回收站</a></li>
+    </ul>
+    <div class="common-form">
+      <form method="post" class="js-ajax-form margin-top-20">
+        <div class="table-actions" style="margin-left:10px;">
+            <button class="btn btn-primary btn-sm js-ajax-submit" type="submit" data-action="{:cmf_plugin_url('lxcomment://AdminIndex/rollback',array('status'=>1))}" data-subcheck="true">还原</button>
+            <button class="btn btn-danger btn-sm js-ajax-submit" type="submit" data-action="{:cmf_plugin_url('lxcomment://AdminIndex/dieDelete',array('status'=>0))}" data-subcheck="true">彻底删除</button>
+        </div>
+        <php>$class=['danger'=>0,'warning'=>1,'info'=>2,'success'=>3,'primary'=>4];</php>
+       <table class="table table-hover table-bordered">
+		  <thead>
+		    <tr>
+		      <th width="16"><label><input type="checkbox" class="js-check-all" data-direction="x" data-checklist="js-check-x"></label></th>
+		      <th>ID</th>
+		      <th>昵称</th>
+		      <th>邮箱</th>
+		      <th>评论内容</th>
+		      <th title="收到新回复 是否邮件通知?">IS_RE？</th>
+		      <th>评论时间</th>
+		      <th>文章标题/URL</th>
+		      <th title="评论者IP地址及所属区域">IP/地区</th>
+		      <th width="115px">操作</th>
+		    </tr>
+		  </thead>
+		  <tbody>
+		    <volist name="list" id="vo" key="k" empty="回收站是空的">
+		    <tr class="{:array_rand($class,1)}">
+		      <td><input type="checkbox" class="js-check" data-yid="js-check-y" data-xid="js-check-x" name="ids[]" value="{$vo.id}"></td>
+		      <th scope="row">{$vo.id}</th>
+		      <td>{$vo.full_name}</td>
+		      <td>{$vo.email|default=''}</td>
+		      <td>{$vo.content|msubstr=0,64}</td>
+		      <td align="center"><if condition="$vo['is_re']"><small>Yes</small><else/><small>No</small></if></td>
+		      <td>{:date('Y-m-d H:i',$vo.create_time)}</td>
+		      <td><a href="{$vo['url']}" target="_blank">{$vo['object_title']}</a></td>
+		      <td>{$vo['ip_add']}</td>
+              <td><a href="{:cmf_plugin_url('lxcomment://AdminIndex/rollback',array('id'=>$vo['id']))}" class="js-ajax-dialog-btn" title="还原此评论">还原</a>&nbsp;|&nbsp;<a href="{:cmf_plugin_url('lxcomment://AdminIndex/dieDelete',array('id'=>$vo['id']))}" class="js-ajax-delete" title="彻底删除此评论">彻底删除</a></td>
+		    </tr>
+		    </volist>
+		  </tbody>
+		</table>
+	  </form>
+		<ul class="pagination pagination-sm">{$page|default=''}</ul>
+    </div>
+</div>
+<include file="public/scripts"/>
+</body>
+</html>

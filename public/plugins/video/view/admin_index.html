@@ -1,0 +1,70 @@
+<!doctype html>
+<html>
+<head>
+    <include file="public/head"/>
+    <title>LNMPA视频管理插件</title>
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+  <style>.table-condensed th{text-align:center;}.table-condensed td{text-align:center;}</style>
+</head>
+<body>
+<div class="wrap js-check-wrap">
+    <ul class="nav nav-tabs">
+        <li class="active"><a>视频管理</a></li>
+        <li><a href="{:cmf_plugin_url('video://AdminIndex/oneadd')}">添加视频</a></li>
+    </ul>
+    <div class="common-form">
+       <form method="post" class="js-ajax-form margin-top-20">
+       <div class="table-actions" style="margin:10px;">
+            <button class="btn btn-primary btn-sm js-ajax-submit" type="submit" data-action="{:cmf_plugin_url('video://AdminIndex/toggle',array('display'=>1))}" data-subcheck="true">显示</button>
+            <button class="btn btn-warning btn-sm js-ajax-submit" type="submit" data-action="{:cmf_plugin_url('video://AdminIndex/toggle',array('hide'=>1))}" data-subcheck="true">隐藏</button>
+        </div>
+        <php>$class=['danger'=>0,'warning'=>1,'info'=>2,'success'=>3,'primary'=>4];</php>
+       <table class="table table-condensed table-hover table-bordered">
+		  <thead>
+		    <tr>
+		      <th width="16"><label><input type="checkbox" class="js-check-all" data-direction="x" data-checklist="js-check-x"></label></th>
+		      <th>ID</th>
+		      <th>视频标题</th>
+		      <th>图|视频</th>
+		      <th>点击量</th>
+		      <th>点赞</th>
+		      <th>踩</th>
+		      <th>评论量</th>
+		      <th>添加时间</th>
+              <th>状态</th>
+		      <th>操作</th>
+		    </tr>
+		  </thead>
+		  <tbody>
+		    <volist name="list" id="vo" key="ko">
+		      <tr class="{:array_rand($class,1)}">
+			      <td><input type="checkbox" class="js-check" data-yid="js-check-y" data-xid="js-check-x" name="ids[]" value="{$vo.id}"></td>
+			      <th scope="row">{$vo.id}</th>
+			      <td>{$vo.vi_name}</td>
+			      <td>
+			        <notempty name="vo.vi_img">
+			          <a href="javascript:parent.imagePreviewDialog('{:cmf_get_image_preview_url($vo.vi_img)}');"><i class="fa fa-photo fa-fw"></i></a> | 
+                      <a href="javascript:parent.videoOpenDialog('{$vo.vi_name}','{:cmf_get_file_download_url($vo.vi_url)}');"><i class="fa fa-play"></i></a>
+			          <else/>
+			          <i class="fa fa-close fa-fw"></i>
+			        </notempty>
+			      </td>
+			      <td>{$vo.vi_hits}</td>
+			      <td>{$vo.vi_like}</td>
+			      <td>{$vo.vi_hate}</td>
+			      <td>{$vo.comment_count}</td>
+			      <td>{:date('Y-m-d H:i',$vo['add_time'])}</td>
+			      <td align="center"><if condition="$vo['status']"><i class="fa fa-check"></i><else/><i class="fa fa-times"></i></if></td>
+	              <td><a href="{:cmf_plugin_url('video://AdminIndex/oneedit',array('id'=>$vo['id']))}" class="" title="编辑">编辑</a>&nbsp;|&nbsp;<a href="{:cmf_plugin_url('video://AdminIndex/delete',array('id'=>$vo['id']))}" class="js-ajax-delete" title="确定删除这条记录吗？">删除</a></td>
+		      </tr>
+		    </volist>
+		  </tbody>
+		</table>
+		</form>
+		<ul class="pagination">{$page}</ul>
+    </div>
+</div>
+<include file="public/scripts"/>
+</body>
+</html>

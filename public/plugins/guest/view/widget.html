@@ -1,0 +1,51 @@
+  <div class="headtitle">
+    <h4>留言区 <small>{$guest_title}</small></h4>
+  </div>
+  <div>
+  	<blockquote>
+  		<p>{$guest_desc}</p>
+  		<footer style="float:right;">Someone famous in <cite title="Source Title">LNMPA龙葵</cite></footer>
+	</blockquote>
+	
+	<form class="form-horizontal" id="form-horizontal">
+	  <div class="form-group form-group-sm">
+	    <label class="col-sm-1 control-label" for="input-nickname" class="col-sm-2 control-label">昵称</label>
+	    <div class="col-sm-6">
+	      <input type="text" class="form-control input-sm" id="input-nickname" name="nickname" placeholder="Jane Doe" required title="">
+	    </div>
+	  </div>
+	  <div class="form-group form-group-sm">
+	    <label class="col-sm-1 control-label" for="input-email" class="col-sm-2 control-label">邮箱</label>
+	    <div class="col-sm-6">
+	      <input type="email" class="form-control input-sm" id="input-email" name="email" placeholder="jane.doe@example.com" pattern="[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?" title="请输入合法的邮箱地址！" required>
+	    </div>
+	  </div>
+	  <div class="form-group form-group-sm">
+	    <label class="col-sm-1 control-label" for="input-url" class="col-sm-2 control-label">网址</label>
+	    <div class="col-sm-6">
+	      <input type="url" class="form-control input-sm" id="input-url" name="url" placeholder="网址：https://xxx.xxx" pattern="[a-zA-z]+://[^\s]*" title="请输入合法网址！">
+	    </div>
+	  </div>
+	  <div class="form-group form-group-sm">
+	    <label class="col-sm-1 control-label" for="input-url" class="col-sm-2 control-label">内容</label>
+	    <div class="col-sm-6">
+	      <textarea class="form-control" rows="3" placeholder="在我这里，点赞和评论都是一件很有趣的事，不信你试试~" id="input-info" name="info"></textarea>
+	    </div>
+	  </div>
+	  <div class="form-group">
+	    <div class="col-sm-offset-1 col-sm-4">
+	      <div class="checkbox">
+	        <label>
+	          <input type="checkbox" name="is_re" id="input-is_re" checked="checked" value="1">接收回复邮件通知
+	        </label>
+	      </div>
+	    </div>
+	  </div>
+	  <div class="form-group">
+	    <div class="col-sm-offset-1 col-sm-4">
+	      <button type="submit" class="btn btn-success btn-sm">提交</button>
+	    </div>
+	  </div>
+	</form>
+  </div>
+<!-- 留言区插件end -->

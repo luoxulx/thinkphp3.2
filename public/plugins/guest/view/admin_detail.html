@@ -1,0 +1,103 @@
+<!doctype html>
+<html>
+<head>
+    <include file="public/head"/>
+    <title>LNMPA留言插件</title>
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+</head>
+<body>
+<div class="wrap js-check-wrap">
+	<form class="form-horizontal" role="form">
+	   <div class="form-group">
+	      <label for="input-nickname" class="col-sm-2 control-label">昵称</label>
+	      <div class="col-sm-10">
+	         <input type="text" class="form-control" id="input-nickname" value="{$data['nickname']|default=''}" disabled/>
+	      </div>
+	   </div>
+	   <div class="form-group">
+	      <label for="input-email" class="col-sm-2 control-label">邮箱</label>
+	      <div class="col-sm-10">
+	         <input type="text" class="form-control" id="input-email" value="{$data['email']|default=''}" disabled/>
+	      </div>
+	   </div>
+	   <div class="form-group">
+	      <label for="input-url" class="col-sm-2 control-label">网址</label>
+	      <div class="col-sm-10">
+	         <input type="text" class="form-control" id="input-url" value="{$data['url']|default=''}" disabled/>
+	      </div>
+	   </div>
+	   <div class="form-group">
+	      <label for="input-time" class="col-sm-2 control-label">时间</label>
+	      <div class="col-sm-10">
+	         <input type="text" class="form-control" id="input-time" value="{:date('Y-m-d',$data['create_time'])}" disabled/>
+	      </div>
+	   </div>
+	   <div class="form-group">
+	    <label for="input-info" class="col-sm-2 control-label">留言内容</label>
+	    <div class="col-sm-10">
+	      <textarea class="form-control" rows="4" id="input-info" disabled>{$data['info']|default=''}</textarea>
+	    </div>
+	  </div>
+	  <div class="form-group">
+	    <label for="input-re_info" class="col-sm-2 control-label">回复</label>
+	    <div class="col-sm-10">
+	      <if condition="$data['re_info']">
+	        <textarea class="form-control" rows="3" id="input-re_info" name="re_info" disabled>{$data['re_info']}</textarea>
+	        <literal><span style="color: #ffb752;">提示：已经回复过该留言信息了，不能更改噢~~</span></literal>
+	      <else/>
+	        <textarea class="form-control" rows="3" id="input-re_info" name="re_info"></textarea>
+	      </if>
+	    </div>
+	  </div>
+	   <div class="form-group">
+	      <div class="col-sm-offset-2 col-sm-10">
+	         <div class="checkbox">
+	            <label>
+	               <input type="checkbox" id="input-is_re" title="邮件提醒已回复？" <if condition="$data['is_re']">checked<else/></if> disabled/> 邮件提醒已回复？
+	            </label>
+                <label><input type="checkbox" name="status" value="1" checked title="通过并显示"/>通过并显示</label>
+	         </div>
+	      </div>
+	   </div>
+	   <div class="form-group">
+	      <div class="col-sm-offset-2 col-sm-10">
+	         <button type="submit" class="btn btn-default">回复</button>
+	      </div>
+	   </div>
+	</form>
+
+</div>
+</body>
+</html>
+<include file="public/scripts"/>
+<script>
+$(function () {
+//guest
+Wind.css('layer');
+Wind.use("layer", function(){
+	$('form').submit(function() {
+		var flag = "{$data['re_info']}";
+		if(flag){
+			layer.msg('已经回复过该访客的留言了~~');
+			return false;
+		}
+        var is_re = 0;
+		if($('#input-is_re').is(':checked')) {
+		    is_re = 1;
+		}
+		var loadT = layer.load(2, {time:3*1000});
+		$.post("{:cmf_plugin_url('guest://AdminIndex/detail')}",{data:{is_re:is_re,re_info:$('#input-re_info').val(),email:$('#input-email').val(),id:"{$data['id']}"}},function(res){
+			layer.close(loadT);
+			if(res.code == 1){
+				layer.msg(res.msg,{icon:6});
+			}else{
+				layer.msg(res.msg,{icon:5});
+			}
+		});
+		return false;
+	});
+	
+});
+});
+</script>

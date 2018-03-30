@@ -1,0 +1,186 @@
+<style>
+.comment-area{position:relative;padding:45px 15px 15px;margin:0 -15px 15px;border-color:#e5e5e5 #eee #eee;border-style:solid;border-width:1px 0;-webkit-box-shadow:inset 0 3px 6px rgba(0,0,0,.05);box-shadow:inset 0 3px 6px rgba(0,0,0,.05)}.blockquote-reverse{border-right:0;border-left:5px solid #eee}.bs-callout-info{border-left-color:#1b809e}.bs-callout{padding:10px;margin:10px 0;border:1px solid #eee;border-left-width:5px;border-radius:3px}.bs-callout-info h5{color:#1b809e}.bs-callout h5{margin-top:0;margin-bottom:5px;font-size:16px}.avatar{width:3.25em;height:auto;float:left}.avatar img{display:block;margin:0 auto;width:100%;height:100%;border-radius:500rem}.span-left{margin-left:15px;color:#777}.bs-example{background-color:#fff;border-radius:4px 4px 0 0;padding:0;margin:10px 0;border-color:#e5e5e5 #eee #eee;border-width:1px 0;box-shadow:inset 0 3px 6px rgba(0,0,0,.05);margin-left:5%}.bs-example a{text-decoration:none}.bs-example img{max-width:35px;height:auto}.p-atwho{margin-right:18px;color:#7807bb}.bg-info{background-color:#f8f8f8;color:#635050}.btn-success{margin-left:90%}.btn-warning{margin-left:90%}
+.round-nickname{color:#778;text-decoration:none !important;}
+</style>
+<div class="comment-area">
+<blockquote class="blockquote-reverse">
+      <p>{$ctitle|default='未设置此变量'}</p>
+      <footer>Someone famous in <cite title="Source Title">HERE</cite></footer>
+</blockquote>
+<form class="form-horizontal" id="lx-comment-form">
+  <div class="form-group">
+    <label for="inputEmail3" class="col-sm-1 control-label">内容</label>
+    <div class="col-sm-8">
+      <textarea class="form-control input-sm" rows="2" name="content" id="input-content" placeholder="在我这里，评论和留言都是很有趣的事情~~"></textarea>
+      <input type="hidden" name="sb_wang_jun_kai" id="sb_wang_jun_kai-id" value="" autocomplete="off">
+      <input type="hidden" name="sb_wang_jun_kai_name" id="sb_wang_jun_kai_name-id" value="" autocomplete="off">
+    </div>
+    <div class="col-sm-2">
+      <a class='round-nickname'><small>头像</small><img src='__TMPL__/public/assets/images/headicon_30.png' width="30px" height="30px;"/></a>
+    </div>
+  </div>
+  
+  <div class="form-group">
+    <label for="niname" class="col-sm-1 control-label">昵称</label>
+    <div class="col-sm-8">
+      <php>$nuserInfo = cmf_get_current_user();</php>
+      <if condition="$nuserInfo">
+      <input type="text" class="form-control input-sm" id="input-niname" value="{$nuserInfo['user_nickname']|default=$nuserInfo['user_login']}" name="full_name" placeholder="Jane Doe" maxlength="16" title="昵称最长16个字符">
+      <else/>
+      <input type="text" class="form-control input-sm" id="input-niname" name="full_name" placeholder="eg：Jane Doe" maxlength="16" title="昵称最长16个字符">
+      </if>
+    </div>
+    <div class="col-sm-1">
+      <a title="随机昵称" href="javascript:rountOneNick();" class='round-nickname'><small>随机</small><i class="fa fa-support"></i></a>
+    </div>
+  </div>
+  
+  <div class="form-group">
+    <div class="col-sm-offset-1 col-sm-8">
+      <div class="checkbox">
+        <label>
+          <input type="checkbox" id="input-nis_re" name="is_re" />有新回复接收邮件通知？
+        </label>
+      </div>
+    </div>
+  </div>
+  <div class="form-group" id="input-nemail-div" style="display:none;">
+    <label for="nemail" class="col-sm-1 control-label">邮箱</label>
+    <div class="col-sm-8">
+      <input type="email" class="form-control input-sm" id="input-nemail" value="" name="email" placeholder="eg：JaneDoe@gmail.com" maxlength="125" title="邮箱最长125个字符">
+    </div>
+  </div>
+  
+  <div class="form-group">
+    <div class="col-sm-offset-1 col-sm-12">
+      <button type="button" class="btn btn-default" onclick="submitTocc();">submit</button>
+    </div>
+  </div>
+</form>
+</div>
+<!-- 已通过评论展示 -->
+<div class="bs-docs-section">
+	
+</div>
+<script>
+function replyOnePerson(pid, pname){
+	Wind.css('layer');
+	Wind.use('layer',function(){
+		if(!parseInt(pid) || !pname){
+			layer.msg('Unlawful Request!');
+			return;
+		}
+		$('#sb_wang_jun_kai-id').val(pid);
+		$('#sb_wang_jun_kai_name-id').val(pname);
+		$('#input-content').attr('placeholder','@'+pname).focus();
+	});
+}
+
+function submitTocc(par){
+	var par = JSON.parse('{$param}');
+	delete par.object_title;
+	Wind.css('layer');
+	Wind.use('layer',function(){
+		if(!par){
+			layer.msg('The current page contains illegal data types!');
+			return false;
+		}
+		var regVer = new RegExp("^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$"); 
+		var cinfo = $('#input-content').val();
+		var is_re = $("input[type='checkbox']").is(':checked');
+		if(cinfo.length<1){
+			layer.msg('Please leave something like a word here',{icon:5});
+			return false;
+		}
+		
+		par.content = cinfo;
+		par.sb_wang_jun_kai = $('#sb_wang_jun_kai-id').val();
+		par.sb_wang_jun_kai_name = $('#sb_wang_jun_kai_name-id').val();
+		par.sb_wang_jun_kai_name?par.sb_wang_jun_kai_name=par.sb_wang_jun_kai_name:par.sb_wang_jun_kai_name='-1';
+		par.sb_wang_jun_kai?par.sb_wang_jun_kai=par.sb_wang_jun_kai:par.sb_wang_jun_kai=0;
+		par.full_name = $('#input-niname').val();
+		par.email = $('#input-nemail').val();
+		
+		if(!par.sb_wang_jun_kai) par.sb_wang_jun_kai = 0;
+		
+		if(is_re){
+			if(par.email.length<1){
+				layer.msg('想接收通知就留下邮箱噢~~');
+				return;
+			}else{
+				if(!regVer.test(par.email)){
+					layer.msg('请输入合法并能正常接收邮件的邮箱地址！',{icon:5});
+					return;
+				}
+			}
+			par.is_re = 1;
+		}else{
+			par.is_re = 0;
+		}
+		
+		$.post("{:cmf_plugin_url('lxcomment://Index/firstFloor')}",{data:par},function(res){
+			if(res.code == 0){
+				layer.msg(res.msg);
+				return false;
+			}
+			layer.msg(res.msg,{icon:6});
+			$('#lx-comment-form')[0].reset();
+		});
+	});
+}
+
+//html
+function backPlHtmls(list){
+	var strs = '';
+	function inc(mores){
+		for(var n in mores){
+			mst += "<div class='bs-example'><a><img src='__TMPL__/public/assets/images/headicon_30.png' alt='网友头像'/><span>"+mores[n].full_name.substring(0,16)+"</span></a><small class='span-left'>"+getCanToSeeTime(mores[n].create_time)+"</small><p class='bg-info'><cite class='p-atwho'>@"+mores[n].to_who.substring(0,16)+"</cite>"+mores[n].content+"</p><a class='btn btn-warning btn-xs' aria-label='Left Align' href='javascript:replyOnePerson("+mores[n].id+",\""+mores[n].full_name+"\");'><span class='glyphicon glyphicon-share-alt' aria-hidden='true'>回复</span></a></div>";
+			if (mores[n]._child.length > 0){
+				inc(mores[n]._child);
+			}
+		}
+		return mst;
+	}
+	for(var i in list){
+		strs += "<div class='bs-callout bs-callout-info'><h5><a class='avatar'><img src='__TMPL__/public/assets/images/headicon_40.png' alt='网友头像'/></a>"+list[i].full_name.substring(0,16)+"<span><small class='span-left'>"+getCanToSeeTime(list[i].create_time)+"</small></span></h5><p>"+list[i].content+"</p><a class='btn btn-success btn-xs' aria-label='Left Align' href='javascript:replyOnePerson("+list[i].id+",\""+list[i].full_name+"\");'><span class='glyphicon glyphicon-share-alt' aria-hidden='true'>回复</span></a>";
+		if(list[i]._child.length > 0){
+			var mst = '';
+            var shtml = inc(list[i]._child);
+			strs += shtml+'</div>';
+		}else {
+			strs += '</div>';
+		}
+	}
+	return strs;
+}
+
+function getCanToSeeTime(nS) {
+	return new Date(parseInt(nS) * 1000).toLocaleString().replace(/:\d{1,2}$/,' ');
+}
+
+function rountOneNick(){
+	var nick = Math.random().toString(36).substr(2);
+	$('#input-niname').val(nick);
+}
+
+//加载完成DOM后获取所有该文章评论数据
+$(function(){
+	$('#input-nis_re').click(function(){
+		$('#input-nemail-div').toggle();
+	});
+    Wind.css('layer');
+	Wind.use('layer',function(){
+		var lodT = layer.load(2, {time:3*1000});
+		var htmls = '';
+		$.post("{:cmf_plugin_url('lxcomment://Index/returnpLs')}",{authcode:'ZXyCEDpedQb43Zli'},function(res){
+			layer.close(lodT);
+			if(res.code==0){
+				$('.bs-docs-section').html("<h5>暂无网友评论</h5>");
+			}else{
+				htmls = backPlHtmls(res.data);
+				$('.bs-docs-section').html(htmls);
+			}
+		});
+	});
+});
+</script>

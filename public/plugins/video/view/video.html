@@ -1,0 +1,20 @@
+
+<blockquote>
+  <p>{$v_infos}</p>
+  <footer style="float:right;">插件作者&nbsp;&nbsp;<cite>LNMPA 龙葵</cite></footer>
+</blockquote>
+<div class="row">
+  <volist name="lists" id="vo">
+  <div class="col-sm-6 col-md-3">
+    <div class="thumbnail">
+      <a href="javascript:parent.openIframeLayer('{:cmf_plugin_url('video://Index/showvi',['id'=>$vo['id']])}','{$vo['vi_name']|msubstr=0,48} 视频详细',{area:['75%','80%']});" title="{$vo['vi_name']}"><img src="{:cmf_get_image_url($vo['vi_img'])}" alt="{$vo['vi_name']}"></a>
+      <div class="caption">
+        <h4>{$vo['vi_name']|msubstr=0,24}</h4>
+        <p>{$vo['vi_desc']|msubstr=0,64}</p>
+        <p><a href="javascript:parent.openIframeLayer('{:cmf_plugin_url('video://Index/showvi',['id'=>$vo['id']])}','{$vo['vi_name']|msubstr=0,48} 视频详细',{area:['75%','80%']});" class="btn btn-default" role="button">{$vo['vi_name']|msubstr=0,28}</a></p>
+      </div>
+    </div>
+  </div>
+  </volist>
+</div>
+<ul class="pagination">{$pages|default=''}</ul>

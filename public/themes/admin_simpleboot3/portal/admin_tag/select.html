@@ -1,0 +1,83 @@
+<include file="public@header"/>
+<style>.table-list{font-size:12px;}</style>
+</head>
+<body>
+<div class="wrap js-check-wrap">
+    <form style="margin-bottom:5px;" method="post" action="{:url('AdminTag/select')}">
+    	<input type="text" class="input-sm" name="key" style="width: 265px;" value="{$keyword|default=''}" placeholder="请输入关键字...">
+    	<input type="submit" class="btn btn-primary btn-xs" value="搜索"/>
+    	<a class="btn btn-danger btn-xs" href="{:url('AdminTag/select')}">清空</a>
+    </form>
+    <form method="post" class="js-ajax-form" action="">
+        <table class="table table-hover table-bordered table-list">
+            <thead>
+            <tr>
+                <th width="16">
+                    <label>
+                        <input type="checkbox" class="js-check-all" data-direction="x" data-checklist="js-check-x">
+                    </label>
+                </th>
+                <th>标签名</th>
+                <th width="85">已有文章数</th>
+                <th width="50">ID</th>
+            </tr>
+            </thead>
+            <tbody>
+            <foreach name="tags" item="vo">
+                <tr>
+                    <td>
+                        <php>$checked = in_array($vo['id'],$selectedIds)?'checked':'';</php>
+                        <input type="checkbox" class="js-check" data-yid="js-check-y" data-xid="js-check-x" name="ids[]" value="{$vo.id}" data-name="{$vo.name}" {$checked}>
+                    </td>
+                    <td>{$vo.name}</td>
+                    <td>{$vo.post_count}</td>
+                    <td>{$vo.id}</td>
+                </tr>
+            </foreach>
+            </tbody>
+        </table>
+    </form>
+</div>
+<script src="__STATIC__/js/admin.js"></script>
+<script>
+
+$(function() {
+	var check_html='';
+	$(".table-bordered tbody tr").each(function(i) {
+		this.style.color = ['#d0221f','#faf','#f0ad4e','#3e0706','#5e12e8','#18d0ca','#3aa014','#d0b9b9','#4a614a','#053865'][i % 10];
+		if($(this).find('input').is(':checked')){
+			check_html+='<tr>'+$(this).html()+'</tr>';
+			$(this).remove();
+		}
+		})
+		$(".table-bordered tbody").prepend(check_html);
+	//点击一行加色选中checkbox
+	$(".table-bordered tr").click(function() {
+		var hasSelected = $(this).hasClass("blue");
+		$(this)[hasSelected ? "removeClass" : "addClass"]("blue").find(":checkbox").prop("checked", !hasSelected);
+	})
+});
+    function confirm() {
+        var selectedCategoriesId   = [];
+        var selectedCategoriesName = [];
+        var selectedCategories     = [];
+        $('.js-check:checked').each(function () {
+            var $this = $(this);
+            selectedCategoriesId.push($this.val());
+            selectedCategoriesName.push($this.data('name'));
+
+            selectedCategories.push({
+                id: $this.val(),
+                name: $this.data('name')
+            });
+        });
+
+        return {
+            selectedCategories: selectedCategories,
+            selectedCategoriesId: selectedCategoriesId,
+            selectedCategoriesName: selectedCategoriesName
+        };
+    }
+</script>
+</body>
+</html>

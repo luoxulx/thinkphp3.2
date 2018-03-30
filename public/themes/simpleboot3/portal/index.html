@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{$site_info.site_name|default=''} 首页</title>
+    <meta name="keywords" content="{$site_info.site_seo_keywords|default=''}"/>
+    <meta name="description" content="{$site_info.site_seo_description|default=''}">
+    <include file="public@head"/>
+    <link href="__TMPL__/public/assets/css/slippry/slippry.css" rel="stylesheet">
+    <style>
+      .caption-wraper{position:absolute;left:50%;bottom:2em}.col-md-3{margin-top:15px}.caption-wraper .caption{position:relative;left:-50%;background-color:rgba(0,0,0,0.54);padding:.4em 1em;color:#fff;-webkit-border-radius:1.2em;-moz-border-radius:1.2em;-ms-border-radius:1.2em;-o-border-radius:1.2em;border-radius:1.2em}.tc-gridbox{margin:0}@media(max-width:767px){.caption-wraper{left:0;bottom:.4em}.caption-wraper .caption{left:0;padding:.2em .4em;font-size:.92em;-webkit-border-radius:0;-moz-border-radius:0;-ms-border-radius:0;-o-border-radius:0;border-radius:0}}.post .featured-media{margin-top:30px;overflow:hidden}.post .featured-media img{width:100%}.main-header{padding-top:62px;padding-bottom:62px;background-repeat:no-repeat;background-position:center 20%;-webkit-background-size:cover;background-size:cover}.main-header{text-align:center;padding:42px 0;background:#f4645f}.btn-doc{position:relative;bottom:-40px;border:1px solid #f1362f;background-color:transparent}.btn-default{border:1px solid #f4645f;background:#f4645f;color:#fff;-webkit-transition:all .2s ease-in-out;-o-transition:all .2s ease-in-out;transition:all .2s ease-in-out}.btn{padding:7px 14px;border-radius:2px}.post-content p {margin-top: 0;margin-bottom: 1.46em;}.post .post-content {margin: 30px 0;}.post-content {font: 400 18px/1.62 Georgia,"Xin Gothic","Hiragino Sans GB","Droid Sans Fallback","Microsoft YaHei",sans-serif;color: #444443;}
+    .sidebar .widget{background:#fff;padding:21px 30px}.widget{margin-bottom:35px}.widget .title{margin-top:0;padding-bottom:7px;border-bottom:1px solid #ebebeb;margin-bottom:21px;position:relative}
+    </style>
+    <hook name="before_head_end"/>
+</head>
+<body class="body-white">
+<include file="public@nav"/>
+<ul id="home-slider" class="list-unstyled">
+    <php>$top_slide_id=empty($theme_vars['top_slide'])?1:$theme_vars['top_slide'];</php>
+    <slides id="$top_slide_id">
+        <li>
+            <div class="caption-wraper">
+                <div class="caption">{$vo.title|default=''}</div>
+            </div>
+            <a href="{$vo.url|default=''}"><img src="{:cmf_get_image_url($vo.image)}" alt=""></a>
+        </li>
+    </slides>
+</ul>
+<!-- HEADER -->
+<header class="main-header" style="background-image: url(__TMPL__/public/assets/images/nonebackground.jpg)">
+   <div class="container">
+    <div class="row">
+     <div class="col-xs-12">
+      <h2><span class="hide"></span></h2>
+      <h2 class="hide"></h2>
+      <!-- <img src="__TMPL__/public/assets/images/fontbackground.jpg" alt="ThinkPHP" class="hide" /> -->
+     </div>
+     <div class="col-xs-12 hidden-xs hidden-sm">
+      <a href="https://www.kancloud.cn/thinkcmf/doc/266473" class="btn btn-default btn-doc" target="_blank" title="thinkcmf5开发文档">5.0 中文文档</a>
+      <a href="{:cmf_url('undergo/TimeLine/welf')}?pkey=cF8QO2s&kCe6oV6uv" class="btn btn-default btn-doc" target="_blank" title="LNMPA 龙葵视频插件">LNMPA 龙葵视频插件</a>
+      <a href="https://cloud.lnmpa.top" class="btn btn-default btn-doc" target="_blank" title="LNMPA 龙葵私人云盘">LNMPA 龙葵私人云盘</a> 
+      <a href="https://lnmpa.top/l_msi/?who=" class="btn btn-default btn-doc" target="_blank" title="LNMPA 龙葵在线音乐播放器">LNMPA 龙葵在线音乐</a> 
+     </div>
+    </div>
+   </div>
+</header>
+<!-- main -->
+<section class="content-wrap">
+
+<div class="container">
+  
+  <div class="row">
+    <!-- content -->
+    <widget name="last_news">
+    <div><h2 class="text-center">{$widget.title}</h2></div>
+    <php>$widget["vars"]["last_news_category_id"] = empty($widget["vars"]["last_news_category_id"])?1:$widget["vars"]["last_news_category_id"];$last_news_limit=50;</php>
+    <main class="col-md-8 main-content">
+    	<portal:articles limit="$last_news_limit" order="post.published_time DESC" categoryIds="$widget.vars.last_news_category_id" page="5">
+    	<article class="post">
+    	  <div class="post-head">
+    	    <h3 class="post-title"><a href="{:cmf_url('portal/Article/index',array('id'=>$vo.id,'cid'=>$vo.category_id))}">{$vo.post_title}</a></h3>
+    	    <div class="post-meta"><time class="post-date" datetime="{:date('Y年m月d日',$vo['published_time'])}" title="{:date('Y年m月d日',$vo['published_time'])}">{:date('Y年m月d日',$vo['published_time'])}</time> • <span class="author">点击：{$vo.post_hits}</span></div>
+    	  </div>
+    	  <div class="featured-media">
+    	      <a href="{:cmf_url('portal/Article/index',array('id'=>$vo.id,'cid'=>$vo.category_id))}">
+    	      <present name="vo.more.thumbnail">
+                  <empty name="vo.more.thumbnail">
+                      <img src="__TMPL__/public/assets/images/default-thumbnail.png" class="img-responsive" alt="{$vo.post_title}" title="{$vo.post_title}">
+                      <else/>
+                      <img src="{:cmf_get_image_url($vo.more.thumbnail)}" class="img-responsive" alt="{$vo.post_title}" title="{$vo.post_title}">
+                  </empty>
+                  <else/>
+                  <img src="__TMPL__/public/assets/images/default-thumbnail.png" class="img-responsive" alt="{$vo.post_title}" title="{$vo.post_title}">
+              </present>
+    	      </a>
+    	  </div>
+    	  <div class="post-content">
+    	    <p></p>
+    	    <p>{$vo.post_excerpt|msubstr=0,128}</p>
+    	    <p></p>
+    	  </div>
+    	  <div class="post-permalink"><a href="{:cmf_url('portal/Article/index',array('id'=>$vo.id,'cid'=>$vo.category_id))}" class="btn btn-default">Detail</a></div>
+    	    <footer class="post-footer clearfix"></footer>
+    	</article>
+    	</portal:articles>
+    	<ul class="pagination"><page/></ul>
+    </main>
+    
+    </widget>
+    <!-- right -->
+    <aside class="col-md-4 sidebar">
+	      <php>$where=['post.create_time'=>['egt',0]];</php>
+  		<widget name="hottest_articles">
+            <div class="tc-box">
+                <div class="headtitle">
+                    <h3>{$widget.title}</h3>
+                </div>
+                <div class="ranking">
+                    <php>$hot_articles=[];</php>
+                    <ul class="list-unstyled">
+                        <portal:articles limit="5" order="post.post_hits DESC" categoryIds="$widget.vars.hottest_articles_category_id">
+                            <php>$top=$key<3?"top3":"";</php>
+                            <li class="{$top}">
+                                <i>{$key+1}</i>
+                                <a title="{$vo.post_title}" href="{:cmf_url('portal/Article/index',array('id'=>$vo['id']))}">{$vo.post_title}</a>
+                            </li>
+                        </portal:articles>
+                    </ul>
+                </div>
+            </div>
+        </widget>
+  		<widget name="last_articles">
+          <div class="tc-box">
+  			<include file="public@tags"/>
+  		  </div>
+  		  <div class="tc-box">
+  		    <div class="headtitle"><h3>{$widget.title}</h3></div>
+  		    <div class="posts">
+  		      <portal:articles limit="5" order="post.published_time DESC" categoryIds="$widget.vars.last_articles_category_id">
+  		        <dl class="dl-horizontal">
+                    <dt>
+                        <a class="img-wraper" href="{:cmf_url('portal/Article/index',array('id'=>$vo.id))}">
+                            <if condition="empty($vo.more.thumbnail)">
+                                <img src="__TMPL__/public/assets/images/default_tupian4.png" class="img-responsive" alt="{$vo.post_title}"/>
+                                <else/>
+                                <img src="{:cmf_get_image_url($vo.more.thumbnail)}" class="img-responsive" alt="{$vo.post_title}"/>
+                            </if>
+                        </a>
+                    </dt>
+                    <dd>
+                        <a href="{:cmf_url('portal/Article/index',array('id'=>$vo['id']))}">{$vo.post_title}</a>
+                    </dd>
+                </dl>
+  		      </portal:articles>
+  		    </div>
+  		  </div>
+  		</widget>
+	      
+  		<include file="public@cright"/>
+	</aside>
+  </div>
+    
+</div>
+</section>
+<include file="public@footer"/>
+<!-- /container -->
+<include file="public@scripts"/>
+<script src="__TMPL__/public/assets/js/lx_tags.js" charset="UTF-8"></script>
+<script src="__TMPL__/public/assets/js/slippry.min.js"></script>
+<script>
+    $(function () {
+        $("#home-slider").slippry({ transition: 'fade', useCSS: true, captions: false, speed: 1000, pause: 3000, auto: true, preload: 'visible' });
+        $("#home-slider").show();
+    });
+</script>
+<hook name="before_body_end"/>
+</body>
+</html>

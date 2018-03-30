@@ -1,0 +1,76 @@
+<include file="public@header"/>
+<style>
+.tips-lx{
+font-size:12px;
+}
+.tips-lx span{
+font-size:12px;
+color:red;
+}
+</style>
+</head>
+<body>
+<div class="wrap js-check-wrap">
+    <ul class="nav nav-tabs">
+        <li><a href="{:url('ArticleCate/index')}">分类管理</a></li>
+        <li><a href="{:url('ArticleCate/add')}">添加分类</a></li>
+        <li class="active"><a href="{:url('ArticleCate/addAll')}">批量添加</a></li>
+    </ul>
+    <div class="row margin-top-20">
+        <div class="col-md-2">
+            <div class="list-group">
+                <a class="list-group-item" href="#A" data-toggle="tab">基本信息</a>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <form class="js-ajax-form" action="{:url('ArticleCate/addAll')}" method="post">
+                <div class="tab-content">
+                    <div class="tab-pane active" id="A">
+                    	<div class="form-group">
+                            <label for="input-parent"><span class="form-required">*</span>上级</label>
+                            <div>
+                                <select class="form-control" name="parent_id" id="input-parent_id">
+                                    <option value="0">作为一级分类</option>
+                                    {$categories_tree}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="input-parent"><span class="form-required">*</span>分类名</label>
+                            <div>
+                                <textarea class="form-control" style="min-height:150px;" name="name" id="input-name"></textarea>
+                                
+                            </div>
+                        </div>
+						<div class="form-group">
+						<label for="input-parent"><span class="form-required">*</span>说明</label>
+						<textarea class="form-control" readonly="readonly" style="min-height:180px;text-align:left;">
+1级分类a
+-2级分类a
+--3级分类a
+--3级分类
+1级分类b
+-2级分类a
+-2级分类a
+						</textarea>
+						<p class="tips-lx"><span>提示：</span>分类之间用换行分隔，下级分类在分类名称前面添加“-”符号！</p>
+						</div>
+                    </div>
+                    <div class="tab-pane" id="B">
+                        
+                    </div>
+                    <div class="tab-pane" id="C">
+                        
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary js-ajax-submit">{:lang('SAVE')}</button>
+                    <a class="btn btn-default" href="{:url('ArticleCate/index')}">{:lang('BACK')}</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="__STATIC__/js/admin.js"></script>
+</body>
+</html>

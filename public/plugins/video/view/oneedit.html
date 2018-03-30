@@ -1,0 +1,141 @@
+<!doctype html>
+<html>
+<head>
+    <include file="public/head"/>
+    <title>LNMPA视频管理插件-编辑视频</title>
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <style type="text/css">
+    .table-bordered th{width:85px;}
+	</style>
+</head>
+<body>
+<div class="wrap js-check-wrap">
+    <ul class="nav nav-tabs">
+        <li><a href="{:cmf_plugin_url('video://AdminIndex/index')}">视频管理</a></li>
+        <li class="active"><a>修改视频信息</a></li>
+    </ul>
+    <form action="{:cmf_plugin_url('video://AdminIndex/oneedit')}" method="post" class="form-horizontal js-ajax-form margin-top-20">
+    	<div class="row margin-top-20">
+    	  <div class="col-md-2">
+            <div class="list-group">
+                <a class="list-group-item" href="#A" data-toggle="tab">基本属性</a>
+                <a class="list-group-item" href="#B" data-toggle="tab">SEO设置</a>
+            </div>
+          </div>
+    	  <div class="col-md-8">
+    	    <div class="tab-content">
+    	      <div class="tab-pane active" id="A">
+	    	    <table class="table table-bordered">
+	    	      <tr>
+	                  <th>视频标题<span class="form-required">*</span></th>
+	                  <td>
+	                      <input class="form-control" type="text" name="vi_name" id="input-vi_name" required value="{$data['vi_name']}" placeholder="请输入视频标题"/>
+	                  </td>
+	              </tr>
+	              <tr>
+	                  <th>副标题</th>
+	                  <td>
+	                      <input class="form-control" type="text" name="vi_label" id="input-vi_label" value="{$data['vi_label']|default=''}" placeholder="请输入视频副标题">
+	                  </td>
+	              </tr>
+	              <tr>
+	                  <th>视频摘要</th>
+	                  <td>
+	                      <textarea class="form-control" name="vi_desc" id="input-vi_desc" rows="2" placeholder="请填写视频摘要信息">{$data['vi_desc']|default=''}</textarea>
+	                  </td>
+	              </tr>
+	              <tr>
+	                  <th>缩略图</th>
+	                  <td>
+	                  	<!-- img -->
+	                  	<div>
+	                         <input type="hidden" name="vi_img" id="thumbnail" value="{$data['vi_img']|default=''}">
+	                         <a href="javascript:uploadOneImage('图片上传','#thumbnail');">
+	                             <if condition="empty($data['vi_img'])">
+	                             <img src="__PLUGIN_TMPL__/public/assets/images/default-thumbnail.png" id="thumbnail-preview" width="75" style="cursor: pointer"/>
+	                             <else/>
+	                             <img src="{:cmf_get_image_preview_url($data['vi_img'])}" id="thumbnail-preview" width="75" style="cursor: pointer"/>
+	                             </if>
+	                         </a>
+	                         <input type="button" class="btn btn-sm btn-cancel-thumbnail" value="取消图片">
+	                     </div>
+	                  </td>
+	              </tr>
+	              <tr>
+	              	<th>视频文件</th>
+	              	<td>
+	              		<!-- video -->
+	                    <ul id="files" class="pic-list list-unstyled form-inline">
+					      <li>
+					        <input id="input-vi_url" type="text" name="vi_url" <if condition="empty($data['vi_url'])">value=''<else/>value='{:cmf_get_file_download_url($data['vi_url'])}'</if> readonly="readonly" style="width:400px;">
+	        				<a href="javascript:uploadOne('视频上传','#input-vi_url','video');">替换</a>
+	        				<a href="javascript:(function(){$('#input-vi_url').val(' ');})();">移除</a>
+					      </li>
+					    </ul>
+	                     <a href="javascript:uploadOne('视频上传','#input-vi_url','video');" class="btn btn-sm btn-default">选择视频</a>
+	              	</td>
+	              </tr>
+	              <tr>
+	                  <th>视频详述</th>
+	                  <td>
+	                      <script type="text/plain" id="content" name="vi_info">{$data['vi_info']|default=''|htmlspecialchars_decode}</script>
+	                  </td>
+	              </tr>
+	    	    </table>
+    	      </div>
+    	      <div class="tab-pane" id="B">
+    	      	<table class="table table-bordered">
+    	      	  <tr>
+	                  <th>SEO标题</th>
+	                  <td>
+	                      <input class="form-control" type="text" name="seo_title" id="input-seo_title" value="{$data['seo_title']|default=''}" placeholder="请输入视频SEO标题"/>
+	                  </td>
+	              </tr>
+	              <tr>
+	                  <th>SEO关键词</th>
+	                  <td>
+	                      <textarea class="form-control" name="seo_keys" id="input-vi_seo_keys" rows="3" placeholder="请填写视频SEO关键词">{$data['seo_keys']|default=''}</textarea>
+	                  </td>
+	              </tr>
+	              <tr>
+	                  <th>SEO描述</th>
+	                  <td>
+	                      <textarea class="form-control" name="seo_desc" id="input-seo_desc" rows="3" placeholder="请填写视频SEO描述">{$data['seo_desc']|default=''}</textarea>
+	                  </td>
+	              </tr>
+    	      	</table>
+    	      	<input type="hidden" name="id" id="input-id" value="{$data['id']}">
+    	      </div>
+    	    </div>
+    	    <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button type="submit" class="btn btn-primary js-ajax-submit">提交</button>
+                    <a class="btn btn-default" href="{:cmf_plugin_url('video://AdminIndex/index')}">返回</a>
+                </div>
+            </div>
+    	</div>
+    </form>
+</div>
+
+</body>
+</html>
+<include file="public/scripts"/>
+<script type="text/javascript">
+    //编辑器路径定义
+    var editorURL = GV.WEB_ROOT;
+</script>
+<script type="text/javascript" src="__STATIC__/js/ueditor/ueditor.config.js"></script>
+<script type="text/javascript" src="__STATIC__/js/ueditor/ueditor.all.min.js"></script>
+<script type="text/javascript">
+    var editorcontent = new baidu.editor.ui.Editor();
+    editorcontent.render('content');
+</script>
+<script type="text/javascript">
+$(function () {
+	$('.btn-cancel-thumbnail').click(function () {
+        $('#thumbnail-preview').attr('src', '__PLUGIN_TMPL__/public/assets/images/default-thumbnail.png');
+        $('#thumbnail').val('');
+    });
+});
+</script>

@@ -1,0 +1,10 @@
+<div class="headtitle"><h3>标签</h3></div>
+<div class="widget">
+<div id="tagscloud">
+	<p>&nbsp;</p>
+	<foreach name="tags" item="vo">
+	<a href="{:cmf_url('portal/search/index')}?keyword={$vo['name']}" class="tagc" style="background:#{:lxReturnRandColor()}" target="_blank">{$vo['name']} ({$vo['post_count']})</a>
+	</foreach>
+	<p>&nbsp;</p><p>&nbsp;</p>
+</div>
+</div>

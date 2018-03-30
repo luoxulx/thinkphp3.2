@@ -1,0 +1,63 @@
+<!doctype html>
+<html>
+<head>
+    <include file="public/head"/>
+    <title>LNMPA龙葵  A simple HTML5 media player放</title>
+    <meta name="description" content="LNMPA龙葵-A simple HTML5 media player with custom controls and WebVTT captions.">
+    <meta name="keywords" content="LNMPA龙葵-A simple HTML5 media player with custom controls and WebVTT captions.">
+    <meta name="author" content="LNMPA龙葵">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="__PLUGIN_TMPL__/public/assets/css/showvi.css" rel="stylesheet">
+    <style type="text/css">
+    .embed-responsive video{width:100%} video::-webkit-media-controls-enclosure {overflow:hidden;} video::-webkit-media-controls-panel {width: calc(100% + 30px);}
+	</style>
+</head>
+<body bgcolor="#F1F1F1" onContextMenu="return false" onSelectStart="return false">
+
+<div class="container">
+
+      <!-- <div class="blog-header">
+        <h1 class="blog-title">{$data['vi_name']|default=''}</h1>
+        <p class="lead blog-description">{$data['vi_label']|default=''}</p>
+      </div> -->
+
+      <div class="row">
+        <div class="col-sm-12 blog-main">
+          <div class="blog-post">
+            <h3 class="blog-post-title">{$data['vi_name']|default=''}</h3>
+            <p class="blog-post-meta">{:date('Y-m-d H:i',$data['add_time'])}&nbsp;&nbsp;&nbsp;by&nbsp;&nbsp;&nbsp;<a href="">{$data['user_id']|default=''}</a></p>
+
+            <p>{$data['vi_desc']|default=''}</p>
+            <hr>
+            <div class="bs-example" data-example-id="responsive-embed-16by9-iframe-youtube">
+              <div class="embed-responsive embed-responsive-16by9">
+                <video controls autoplay><source src="{:cmf_get_file_download_url($data['vi_url'])}" type="video/mp4"/>
+                不支持
+                </video>
+              </div>
+            </div>
+            <hr>
+            <div class="main">
+            {$data['vi_info']|default=''|htmlspecialchars_decode}
+            </div>
+          </div>
+
+          <nav>
+            <ul class="pager">
+              <li><a href="<if condition="$prev">{:cmf_plugin_url('video://Index/showvi',['id'=>$prev['id']])}<else/>javascript:artdialogAlert('没有了~');</if>" title="{$prev['vi_name']|msubstr=0,64}">Previous</a></li>
+              <li><a href="<if condition="$next">{:cmf_plugin_url('video://Index/showvi',['id'=>$next['id']])}<else/>javascript:artdialogAlert('没有了~');</if>" title="{$next['vi_name']|msubstr=0,64}">Next</a></li>
+            </ul>
+          </nav>
+
+        </div>
+      </div>
+
+</div>
+
+</body>
+</html>
+<include file="public/scripts"/>
+<script type="script/text">
+$("video").live("contextmenu",function(){return false;});
+</script>

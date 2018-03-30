@@ -1,0 +1,64 @@
+<!doctype html>
+<html>
+<head>
+    <include file="public/head"/>
+    <title>LNMPA留言插件</title>
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+</head>
+<body>
+<div class="wrap js-check-wrap">
+    <ul class="nav nav-tabs">
+        <li class="active"><a>留言管理</a></li>
+    </ul>
+    <div class="common-form">
+      <form method="post" class="js-ajax-form margin-top-20" action="{:cmf_plugin_url('guest://AdminIndex/listOrder')}">
+       <div class="table-actions" style="margin-left:10px;">
+            <button class="btn btn-info btn-sm js-ajax-submit" type="submit">更新排序</button>
+            <button class="btn btn-primary btn-sm js-ajax-submit" type="submit" data-action="{:cmf_plugin_url('guest://AdminIndex/toggle',array('display'=>1))}" data-subcheck="true">显示</button>
+            <button class="btn btn-warning btn-sm js-ajax-submit" type="submit" data-action="{:cmf_plugin_url('guest://AdminIndex/toggle',array('hide'=>1))}" data-subcheck="true">隐藏</button>
+        </div>
+        <php>$class=['danger'=>0,'warning'=>1,'info'=>2,'success'=>3,'primary'=>4];</php>
+       <table class="table table-hover table-bordered">
+		  <thead>
+		    <tr>
+		      <th width="16"><label><input type="checkbox" class="js-check-all" data-direction="x" data-checklist="js-check-x"></label></th>
+		      <th>排序</th>
+		      <th>ID-&nbsp;序号</th>
+		      <th>昵称</th>
+		      <th>邮箱</th>
+		      <th width="15%">个人网址</th>
+		      <th width="25%">留言内容</th>
+		      <th>IS_RE？</th>
+		      <th>时间</th>
+		      <th>显示？</th>
+              <th>已回复？</th>
+		      <th>操作</th>
+		    </tr>
+		  </thead>
+		  <tbody>
+		    <volist name="list" id="vo" key="k" empty="暂无访客留言">
+		    <tr class="{:array_rand($class,1)}">
+		      <td><input type="checkbox" class="js-check" data-yid="js-check-y" data-xid="js-check-x" name="ids[]" value="{$vo.id}"></td>
+		      <td><input name='list_orders[{$vo.id}]' class="input input-order mr5" type='text' size='3' value='{$vo.list_order}'></td>
+		      <th scope="row">{$vo.id} , <small>{$k}</small></th>
+		      <td>{$vo.nickname}</td>
+		      <td>{$vo.email}</td>
+		      <td>{$vo.url}</td>
+		      <td>{$vo.info|msubstr=0,64}</td>
+		      <td align="center"><if condition="$vo['is_re']"><small>Yes</small><else/><small>No</small></if></td>
+		      <td>{:date('Y-m-d',$vo.create_time)}</td>
+		      <td align="center"><if condition="$vo['status']"><i class="fa fa-check"></i><else/><i class="fa fa-times"></i></if></td>
+		      <td align="center"><if condition="$vo['re_info']"><i class="fa fa-check"></i><else/><i class="fa fa-times"></i></if></td>
+              <td><a href="javascript:parent.openIframeLayer('{:cmf_plugin_url('guest://AdminIndex/detail',array('id'=>$vo['id']))}','{$vo.nickname}的留言详细',{area:['65%','80%']});" title="查看详细并回复">回复</a> | <a href="{:cmf_plugin_url('guest://AdminIndex/delete',array('id'=>$vo['id']))}" class="js-ajax-delete" title="删除{$vo.nickname}的这条留言">删除</a></td>
+		    </tr>
+		    </volist>
+		  </tbody>
+		</table>
+	  </form>
+		<ul class="pagination">{$page|default=''}</ul>
+    </div>
+</div>
+<include file="public/scripts"/>
+</body>
+</html>

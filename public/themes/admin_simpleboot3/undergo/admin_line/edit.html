@@ -1,0 +1,72 @@
+<include file="public@header"/>
+</head>
+<body>
+<div class="wrap">
+    <ul class="nav nav-tabs">
+        <li><a href="{:url('adminIndex')}">经历列表</a></li>
+        <li class="active"><a href="{:url('add')}">{$meatname}时间线</a></li>
+    </ul>
+    <form method="post" class="form-horizontal js-ajax-form margin-top-20" action="<if condition="$meatname eq '添加'">{:url('add')}<else/>{:url('edit')}</if>">
+        <div class="form-group">
+            <label for="input-link_url" class="col-sm-2 control-label">时间<span class="form-required">*</span></label>
+            <div class="col-md-6 col-sm-10">
+                <input type="text" class="form-control js-bootstrap-date" id="input-time" name="time" value="<if condition="$meatname eq '编辑'">{:date('Y-m-d',$data.time)}</if>" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="input-link_name" class="col-sm-2 control-label">事件<span class="form-required">*</span></label>
+            <div class="col-md-6 col-sm-10">
+                <textarea class="form-control" name="info" id="input-info" required>{$data.info|default=''}</textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="input-link_description" class="col-sm-2 control-label">额外信息</label>
+            <div class="col-md-6 col-sm-10">
+                <textarea class="form-control" name="more" id="input-more">{$data.more|default=''}</textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="input-link_description" class="col-sm-2 control-label">事件内容样式</label>
+            <div class="col-md-6 col-sm-10">
+                <select class="form-control" name="class">
+                <option value="bg-primary">bg-primary</option>
+                <option value="bg-success">bg-success</option>
+                <option value="bg-info">bg-info</option>
+                <option value="bg-warning">bg-warning</option>
+                <option value="bg-danger">bg-danger</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+          <label for="input-link_description" class="col-sm-2 control-label">缩略图</label>
+            <input type="hidden" name="img" id="thumbnail" value="{$data.img|default=''}">
+            <a href="javascript:uploadOneImage('图片上传','#thumbnail');">
+                <if condition="empty($data.img)">
+                    <img src="__TMPL__/public/assets/images/default-thumbnail.png" id="thumbnail-preview" width="135" style="cursor: pointer"/>
+                    <else/>
+                    <img src="{:cmf_get_image_preview_url($data.img)}" id="thumbnail-preview" width="135" style="cursor: pointer"/>
+                </if>
+            </a>
+            <input type="button" class="btn btn-sm btn-cancel-thumbnail" value="取消图片">
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+            	<if condition="$meatname eq '编辑'"><input type="hidden" name="id" value="{$data.id}"></if>
+                <button type="submit" class="btn btn-primary js-ajax-submit">{:lang('SAVE')}</button>
+                <a class="btn btn-default" href="{:url('adminIndex')}">{:lang('BACK')}</a>
+            </div>
+        </div>
+    </form>
+</div>
+<script src="__STATIC__/js/admin.js"></script>
+<script type="text/javascript">
+    $(function () {
+    	$('.btn-cancel-thumbnail').click(function () {
+            $('#thumbnail-preview').attr('src', '__TMPL__/public/assets/images/default-thumbnail.png');
+            $('#thumbnail').val('');
+        });
+    });
+</script>
+
+</body>
+</html>
