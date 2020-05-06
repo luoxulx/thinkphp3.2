@@ -17,10 +17,10 @@ if (file_exists(CMF_ROOT . "data/conf/config.php")) {
 $configs = [
      #2017-11-28 新增oss-lx
     'aliyun_oss'=>[
-            'accessKeyId'      => 'LTAIMXFKRtEPIXmS',  //您的Access Key ID
-            'accessKeySecret'  => '4cByhm1HdfOvnxyuUuJqCmAowV8wRW',  //您的Access Key Secret
-            'endpoint'         => 'oss-cn-shanghai.aliyuncs.com',  //阿里云oss 外网地址endpoint
-            'bucketName'       => 'luoxu-oss',  //Bucket名称
+            'accessKeyId'      => '321312',  //您的Access Key ID
+            'accessKeySecret'  => '321321',  //您的Access Key Secret
+            'endpoint'         => '312312',  //阿里云oss 外网地址endpoint
+            'bucketName'       => '3213',  //Bucket名称
     ],
     
     // +----------------------------------------------------------------------
